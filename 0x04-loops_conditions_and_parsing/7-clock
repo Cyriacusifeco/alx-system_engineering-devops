@@ -1,4 +1,5 @@
 #!/usr/bin/env bash
+#print time for 12 long hours.
 
 hour=0
 
