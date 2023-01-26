@@ -1,4 +1,5 @@
 #!/usr/bin/env bash
+# Print and say hi at 9th iteration
 
 count=1
 while [ $count -le 10 ]
