@@ -1,0 +1,7 @@
+#!/usr/bin/env bash
+# Configuration lines to enable connection to server without
+# typing a password
+
+HOST *
+    PasswordAuthentication no
+    IdentityFile ~/.ssh/school
