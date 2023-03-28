@@ -1,0 +1,25 @@
+#!/usr/bin/env bash
+
+# Update package repositories
+sudo apt-get update
+
+# Install Nginx web server
+sudo apt-get install nginx -y
+
+# Create server block configuration
+sudo bash -c 'cat > /etc/nginx/sites-available/redirect_me.conf <<EOF
+server {
+    listen 80;
+    server_name example.com;
+
+    location /redirect_me {
+        return 301 https://www.example.com/new_page;
+    }
+}
+EOF'
+
+# Enable server block
+sudo ln -s /etc/nginx/sites-available/redirect_me.conf /etc/nginx/sites-enabled/
+
+# Restart Nginx
+sudo systemctl restart nginx
