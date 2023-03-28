@@ -1,0 +1,31 @@
+#!/usr/bin/env bash
+# install nginx, configure, redirect and customize 404 page
+
+sudo apt-get update
+sudo apt-get -y install nginx
+sudo apt-get -y install ufw
+sudo ufw allow 'Nginx Full'
+echo 'Hello world!' > /var/www/html/index.html
+
+SERVER_CONFIG=\
+"server {
+    listen 80 default_server;
+    listen [::]:80 default_server;
+    root /var/www/html;
+    index index.html;
+    server_name _;
+    location / {
+            try_files \$uri \$uri/ =404;
+            }
+    error_page 404 /custom_404.html;
+    location /custom_404.html {
+            internal;
+            }
+    location ~ /redirect_me {
+            return 301 /www.google.com;
+            }
+    }"
+
+echo "Ceci n'est pas une page" > /var/www/html/custom_404.html
+echo "$SERVER_CONFIG" > /etc/nginx/sites-enabled/default
+service nginx restart
