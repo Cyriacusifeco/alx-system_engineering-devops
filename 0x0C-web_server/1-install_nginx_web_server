@@ -1,8 +1,8 @@
 #!/usr/bin/env bash
-# Installing nginx on our webserver
+# A script that installs nginx and configures it to return
+# the string 'Hello world!' when its root / receives a GET request
 
 sudo apt-get update
 sudo apt-get -y install nginx
-sudo chown  $USER:$USER /var/www/html/index.html
-echo "Hello World!" > /var/www/html/index.html
+echo "Hello world!" > /var/www/html/index.html
 service nginx start
