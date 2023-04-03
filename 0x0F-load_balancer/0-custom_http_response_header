@@ -1,0 +1,26 @@
+#!/usr/bin/env bash
+
+# Update package repository
+sudo apt-get update
+
+# Install Nginx
+sudo apt-get install -y nginx
+
+# Configure Nginx to listen on port 80
+sudo sed -i 's/listen 80 default_server;/listen 80;/g' /etc/nginx/sites-available/default
+
+# Add custom HTTP header to Nginx response
+sudo sed -i '/server_name _;/a add_header X-Served-By $hostname;' /etc/nginx/sites-available/default
+
+# Restart Nginx
+sudo systemctl restart nginx
+
+# Create a test page
+echo "Hello World!" | sudo tee /var/www/html/index.html
+
+# Test Nginx configuration by querying it with curl
+if curl -s http://localhost | grep -q "Hello World!"; then
+    echo "Nginx configured successfully"
+else
+    echo "Nginx configuration failed"
+fi
