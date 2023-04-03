@@ -1,43 +1,7 @@
 #!/usr/bin/env bash
-
-# Install and configure Nginx to redirect /redirect_me and display custom 404 page
-
-# Install Nginx
+# redirection /redirect_me
 sudo apt-get update
 sudo apt-get -y install nginx
-
-# Configure redirect
-SERVER_CONFIG=\
-"server {
-    listen 80 default_server;
-    listen [::]:80 default_server;
-    root /var/www/html;
-    index index.html;
-    server_name _;
-    location / {
-        try_files \$uri \$uri/ =404;
-    }
-    location /redirect_me {
-        return 301 http://www.google.com;
-    }
-}"
-echo "$SERVER_CONFIG" > /etc/nginx/sites-enabled/default
-
-# Configure custom 404 page
-echo "Ceci n'est pas une page." | sudo tee /var/www/html/404.html > /dev/null
-ERROR_CONFIG=\
-"server {
-    listen 80 default_server;
-    listen [::]:80 default_server;
-    root /var/www/html;
-    index index.html;
-    server_name _;
-    error_page 404 /404.html;
-    location = /404.html {
-        internal;
-    }
-}"
-echo "$ERROR_CONFIG" > /etc/nginx/sites-enabled/404
-
-# Restart Nginx
-sudo service nginx restart
+echo 'Hello World!' > /var/www/html/index.html
+sed -i '/server_name _/a location /redirect_me { rewrite ^ https://www.youtube.com/watch?v=QH2-TGUlwu4? permanent; }' /etc/nginx/sites-available/default
+service nginx restart
