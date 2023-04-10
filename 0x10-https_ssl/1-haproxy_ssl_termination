@@ -1,0 +1,18 @@
+#!/usr/bin/env bash
+#HAproxy configuration file.
+
+
+frontend http-in
+    bind *:80
+    bind *:443 ssl crt /etc/letsencrypt/live/www.cyriacusifeco.tech/fullchain.pem
+    mode http
+    option forwardfor
+    reqadd X-Forwarded-Proto:\ https
+    redirect scheme https if !{ ssl_fc }
+    default_backend servers
+
+backend servers
+    balance roundrobin
+    option httpchk
+    server 152357-web-01 54.237.124.196:80 check
+    server 152357-web-02 34.207.83.120:80 check
