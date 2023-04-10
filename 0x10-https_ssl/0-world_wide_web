@@ -3,25 +3,21 @@
 #+ about our subdomains.
 
 
-function audit_subdomain {
-    local subdomain=$1
-    local domain=$2
-    local record_type=$(dig +short $subdomain.$domain | awk '{print toupper($1)}')
-    local destination=$(dig +short $subdomain.$domain)
-
-    echo "The subdomain $subdomain is a $record_type record and points to $destination"
-}
-
 domain=$1
 subdomain=$2
 
 if [ -z "$subdomain" ]; then
-    subdomain_list=("www" "lb-01" "web-01" "web-02")
+    subdomains=(www lb-01 web-01 web-02)
 else
-    subdomain_list=("$subdomain")
+    subdomains=($subdomain)
 fi
 
-for sub in "${subdomain_list[@]}"
-do
-    audit_subdomain $sub $domain
+for subdomain in ${subdomains[@]}; do
+    result=$(dig +short $subdomain.$domain)
+    record=$(dig $subdomain.$domain | awk '/ANSWER SECTION:/{getline; split($1,b,"."); print $4}')
+    if [ -z "$result" ]; then
+        echo "The subdomain $subdomain is not defined for $domain"
+    else
+        echo "The subdomain $subdomain is a $record record and points to $result"
+    fi
 done
