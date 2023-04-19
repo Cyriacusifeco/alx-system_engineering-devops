@@ -1,18 +1,5 @@
 #!/usr/bin/env bash
-# A script that gets backup for all databases
+# Generates a MySQL dump and creates a compressed archive out of it
 
-# Get today's date
-date=$(date +%d-%m-%Y)
-
-# Set the password for the root user
-password=$1
-
-# Dump all MySQL databases to backup.sql
-mysqldump -u root -p$password --all-databases > backup.sql
-
-# Compress the backup.sql file to a tar.gz archive
-tar -czvf $date.tar.gz backup.sql
-
-# Remove the original backup.sql file
-rm backup.sql
-
+mysqldump -uroot -p"$1" --all-databases > backup.sql
+tar -czf $(date +%d-%m-%Y).tar.gz backup.sql
