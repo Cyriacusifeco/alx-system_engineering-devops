@@ -8,7 +8,7 @@ date=$(date +%d-%m-%Y)
 password=$1
 
 # Dump all MySQL databases to backup.sql
-mysqldump -u root -p$password --all-databases > backup.sql
+sudo mysqldump -u root -p$password --all-databases > backup.sql
 
 # Compress the backup.sql file to a tar.gz archive
 tar -czvf $date.tar.gz backup.sql
